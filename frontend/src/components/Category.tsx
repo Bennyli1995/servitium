@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import React from "react";
 import Electrical from "../assets/Electrical.png";
 import Insurance from "../assets/Insurance.png";
@@ -33,12 +34,16 @@ type CategoryProps = {
 const Category: React.FC<CategoryProps> = ({ label }) => {
   // Get the correct image based on the label
   const imageSrc = categoryImages[label];
+  const path = `/category/${label.toLowerCase()}`;
 
   return (
-    <div className="flex flex-col items-center p-4 hover:bg-blue-300 rounded-lg cursor-pointer">
+    <Link
+      to={path}
+      className="flex flex-col items-center p-4 hover:bg-blue-300 rounded-lg cursor-pointer"
+    >
       <img src={imageSrc} alt={label} className="mb-2 h-16 w-16" />
       <span className="text-md font-medium">{label}</span>
-    </div>
+    </Link>
   );
 };
 
