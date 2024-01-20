@@ -1,6 +1,8 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import profilePic from "../assets/User.jpeg";
+
+// needs to change based on backend later
 import mockData from "../Fakers/fakeServiceWorkers";
 
 const WorkerDetails: React.FC = () => {
@@ -74,8 +76,6 @@ const WorkerDetails: React.FC = () => {
                 </button>
               </div>
             </div>
-
-            {/* Additional sections for Reviews etc. */}
           </div>
         </div>
       </div>
