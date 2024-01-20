@@ -1,15 +1,7 @@
 import { InferSchemaType, model, Schema } from "mongoose";
+import ReviewModel from "./review";
 
-// const noteSchema = new Schema({
-//     title: { type: String, required: true},
-//     text: {type: String, required: false},
-
-    
-
-// }, {timestamps: true});
-
-
-const noteSchema = new Schema({
+const workerSchema = new Schema({
     worker_id: { type: Number, required: true },
     first_name: { type: String, required: true },
     last_name: { type: String, required: true },
@@ -24,11 +16,9 @@ const noteSchema = new Schema({
     schedule: { type: [String], required: false }, // Assuming schedule information is strings, you can adjust this as needed
 }, { timestamps: true });
 
+type Worker = InferSchemaType<typeof workerSchema>;
 
-
-type Note = InferSchemaType<typeof noteSchema>;
-
-export default model<Note>("workers", noteSchema);
+export default model<Worker>("workers", workerSchema);
 
 
 
