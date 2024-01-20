@@ -12,7 +12,7 @@ const workerSchema = new Schema({
     years_exp: { type: Number, required: true },
     headshot: { type: String, required: true },
     licenses: { type: [String], required: true },
-    reviews: { type: [String], required: false }, // Assuming reviews are strings, you can adjust this as needed
+    reviews: { type: [], required: false }, // Assuming reviews are strings, you can adjust this as needed
     schedule: { type: [String], required: false }, // Assuming schedule information is strings, you can adjust this as needed
 }, { timestamps: true });
 

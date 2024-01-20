@@ -15,18 +15,28 @@ app.get("/service_workers", async (req, res) => {
     
     const reviews = await ReviewModel.find().exec();
 
+    const result = [];
     
-    // for (const worker of workers) {
+    for (const worker of workers) {
         
-    //     const id = worker.worker_id;
-    //     for (const review of reviews) {
-    //         if (id === review.tradespersonID) {
-    //             console.log(review);
+        const id = worker.worker_id;
+        for (const review of reviews) {
+            if (id === review.tradespersonID) {
+                // console.log(review);
 
-    //             worker.reviews?.push("test review");
-    //         }
-    //     }
-    // }
+                worker.reviews?.push(review);
+                
+                
+            }
+            
+            
+        }
+        result.push(worker);
+    }
+
+    // console.log(result);
+
+    res.status(200).json(result);
 
     res.status(200).json([workers,reviews]);
   } catch (error) {
