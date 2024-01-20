@@ -1,12 +1,29 @@
-import { useState } from "react";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+import HomePage from "./pages/HomePage";
+import ProfilePage from "./pages/ProfilePage";
+import SettingsPage from "./pages/SettingsPage";
 
-import "./App.css";
-
-function App() {
+const App: React.FC = () => {
   return (
-    console.log("hello world!");
-    <h1 className="text-3xl text-red-500 font-bold underline">Hello world!</h1>
+    <Router>
+      <div className="flex flex-col h-screen">
+        <Header /> {/* This will always be displayed */}
+        <main className="flex-grow">
+          <Routes>
+            {/* Define your routes here */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            {/* Add more routes as needed */}
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
