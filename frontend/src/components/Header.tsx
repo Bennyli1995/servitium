@@ -18,7 +18,7 @@ const Header: React.FC = () => {
       <div className="max-w-5xl ml-48 flex justify-between items-center px-4 sm:px-6 lg:px-8">
         {/* Logo and Text */}
         <div className="flex items-center space-x-4">
-          <Link to="/" className="flex items-center">
+          <Link to="/home" className="flex items-center">
             <img
               className="ml-4"
               src={logo}
