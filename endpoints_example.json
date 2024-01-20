@@ -1,0 +1,69 @@
+
+// endpoints 
+
+
+
+// get /service_workers
+
+// no input
+
+// output
+
+[{
+    "worker_id": 1,
+    "first_name": "dale",
+    "last_name": "reynolds",
+    "rating": 4.8,
+    "rate": 24,
+    "years_exp" :10,
+    "description" : "description for tradesperson",
+    "photo": BLOB, // TBD
+    "skills": ["comm", "patient", "knowledgeable"],
+    "trade": "Electrician",
+    "phone": 7766054665,
+    "email": "email@email.com"
+}
+]
+
+// get /reviews
+
+// output
+[
+    {
+        "review_id": 1,
+        "reviewer_name": "Tommy Fury",
+        "date": 2021-02-23, // date object,
+        "worker_id": 1,
+        "description": "very good worker",
+        "rating": 4
+    }
+]
+
+
+// post /review
+
+// input
+{
+    {
+        "reviewer_name": "Tommy Fury",
+        "date": 2021-02-23, // date object,
+        "worker_id": 1,
+        "description": "very good worker",
+        "rating": 4
+    }
+
+}
+
+
+// get /users
+
+[
+    {
+        "user_id": 1,
+        "first_name": "dale",
+        "last_name": "reynolds",
+        "email": "user@user.com",
+        }
+]
+
+
