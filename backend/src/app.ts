@@ -1,7 +1,9 @@
 import "dotenv/config";
 import express from "express";
 const cors = require("cors");
-import NoteModel from "./models/note";
+import bodyParser from 'body-parser';
+
+// import NoteModel from "./models/note";
 
 import WorkerModel from "./models/worker";
 
@@ -10,6 +12,10 @@ import ReviewModel from "./models/review";
 
 const app = express();
 app.use(cors());
+
+app.use(bodyParser.json()); // Add this line to enable JSON body parsing
+app.use(bodyParser.urlencoded({ extended: true })); // Add this line to enable URL-encoded body parsing
+
 
 app.get("/service_workers", async (req, res) => {
   try {
@@ -44,6 +50,48 @@ app.get("/service_workers", async (req, res) => {
   }
 });
 
-function getReviews() {}
+
+// POST endpoint to add a review
+app.post("/add_review", async (req, res) => {
+  try {
+    const { userID, tradespersonID, rating, comment, date } = req.body;
+
+    console.log(userID);
+    // // Assuming you have a worker with the provided tradespersonID
+    // const worker = await WorkerModel.findOne({ worker_id: tradespersonID });
+
+    // if (!worker) {
+    //   return res.status(404).json({ error: "Tradesperson not found" });
+    // }
+
+    // // Create a new review instance
+    // const newReview: Review = new ReviewModel({
+    //   review_id: Math.floor(Math.random() * 1000) + 1,
+    //   userID,
+    //   tradespersonID,
+    //   rating,
+    //   comment,
+    //   date,
+    // });
+
+    // // Save the review to MongoDB
+    // await newReview.save();
+
+    // // Update the worker's reviews array
+    // worker.reviews?.push(newReview);
+
+    // // Save the updated worker to MongoDB
+    // await worker.save();
+
+    res.status(201).json({ message: "Review added successfully" });
+  } catch (error) {
+    console.error(error);
+    let errorMessage = "An unknown error occurred";
+    if (error instanceof Error) errorMessage = error.message;
+    res.status(500).json({ error: errorMessage });
+  }
+});
+
+
 
 export default app;
