@@ -9,6 +9,7 @@ const SearchBar: React.FC = () => {
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     navigate(`/search-results?query=${encodeURIComponent(query)}`);
+    setQuery("");
   };
 
   return (

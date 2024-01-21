@@ -5,16 +5,26 @@ import ImageComponent from "./ImageComponent";
 
 const CategoryPage: React.FC = () => {
   const { categoryLabel } = useParams();
+  const [sortType, setSortType] = useState("rate");
   const [workers, setWorkers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
+  const sortWorkers = (workers, sortType) => {
+    switch (sortType) {
+      case "rate":
+        return [...workers].sort((a, b) => a.rate - b.rate);
+      case "experience":
+        return [...workers].sort((a, b) => b.years_exp - a.years_exp);
+      default:
+        return workers;
+    }
+  };
   useEffect(() => {
     const fetchWorkers = async () => {
       setIsLoading(true);
       try {
-        // Adjust the URL according to your server configuration
         const response = await fetch(
           `http://localhost:5001/service_workers/${categoryLabel}`
         );
@@ -22,16 +32,20 @@ const CategoryPage: React.FC = () => {
         const filteredWorkers = data.filter(
           (worker) => worker.trade.toLowerCase() === categoryLabel.toLowerCase()
         );
-        setWorkers(filteredWorkers);
+        setWorkers(sortWorkers(filteredWorkers, sortType));
       } catch (error) {
         console.error("Failed to fetch workers:", error);
-        // Handle any errors here
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
 
     fetchWorkers();
-  }, [categoryLabel]);
+  }, [categoryLabel, sortType]);
+
+  const handleSortChange = (e) => {
+    setSortType(e.target.value);
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -50,15 +64,29 @@ const CategoryPage: React.FC = () => {
         >
           ← Back
         </button>
+        <div className="mb-4">
+          <label htmlFor="sort" className="mr-2 font-bold text-gray-700">
+            Sort by:
+          </label>
+          <select
+            id="sort"
+            value={sortType}
+            onChange={handleSortChange}
+            className="border border-gray-300 rounded px-3 py-2"
+          >
+            <option value="rate">Price</option>
+            <option value="experience">Experience</option>
+          </select>
+        </div>
         {workers.map((worker) => (
           <div
             key={worker.worker_id}
-            className="p-4 border rounded-lg shadow-md bg-white"
+            className="p-4 border rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow cursor-pointer"
             onClick={() => navigate(`/worker/${worker.worker_id}`)}
           >
             <div className="flex items-center space-x-4">
               <div className="flex-shrink-0">
-              <ImageComponent imageUrl={worker.headshot}/>
+                <ImageComponent imageUrl={worker.headshot} />
                 {/* <img
                   src={profilePic}
                   alt={`${worker.first_name} ${worker.last_name}`}

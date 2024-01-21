@@ -10,6 +10,7 @@ import CategoryPage from "./pages/CategoryPage";
 import WorkerDetailsPage from "./pages/WorkerDetailsPage";
 import LoginPage from "./pages/LoginPage";
 import SearchResultsPage from "./pages/SearchResultsPage";
+import ContactForm from "./components/ContactForm";
 
 const App: React.FC = () => {
   return (
@@ -30,6 +31,7 @@ const App: React.FC = () => {
                 element={<CategoryPage />}
               />
               <Route path="/worker/:workerId" element={<WorkerDetailsPage />} />
+              <Route path="/contact" element={<ContactForm />} />
             </Routes>
           </main>
           <Footer />

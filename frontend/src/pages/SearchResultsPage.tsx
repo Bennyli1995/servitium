@@ -11,31 +11,29 @@ const SearchResultsPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    let isMounted = true;
-
     const fetchRecommendations = async () => {
       setIsLoading(true);
       try {
-        const recResponse: any = await fetch("http://localhost:5001/recommend", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: query }),
-        });
+        const recResponse: any = await fetch(
+          "http://localhost:5001/recommend",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: query }),
+          }
+        );
 
-        
         let recData: any = await recResponse.json();
 
-        if (isMounted) {
-          const recDataResponse = recData.response;
-          const workersResponse = await fetch(
-            "http://localhost:5001/service_workers"
-          );
-          const workersData = await workersResponse.json();
-          const filteredWorkers = workersData.filter((worker) =>
-            recDataResponse.includes(worker.worker_id)
-          );
-          setRecommendedWorkers(filteredWorkers);
-        }
+        const recDataResponse = recData.response;
+        const workersResponse = await fetch(
+          "http://localhost:5001/service_workers"
+        );
+        const workersData = await workersResponse.json();
+        const filteredWorkers = workersData.filter((worker) =>
+          recDataResponse.includes(worker.worker_id)
+        );
+        setRecommendedWorkers(filteredWorkers);
       } catch (error) {
         console.error("Failed to fetch recommendations:", error);
       } finally {
@@ -46,12 +44,7 @@ const SearchResultsPage: React.FC = () => {
     if (query) {
       fetchRecommendations();
     }
-
-    // Cleanup function to handle unmounting
-    return () => {
-      isMounted = false;
-    };
-  }, [prompt]);
+  }, []);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -69,24 +62,25 @@ const SearchResultsPage: React.FC = () => {
           className="p-4 mb-4 border rounded-lg shadow-md bg-white cursor-pointer hover:shadow-lg"
           onClick={() => navigate(`/worker/${worker.worker_id}`)}
         >
-          <div className="flex items-center space-x-4">
-            <div className="flex-shrink-0">
-              <img
-                src={worker.headshot || profilePic}
-                alt={`${worker.first_name} ${worker.last_name}`}
-                className="h-12 w-12 rounded-full"
-              />
+          <div className="flex items-center justify-between">
+            <div className="flex space-x-4">
+              <div className="flex-shrink-0">
+                <img
+                  src={worker.headshot || profilePic}
+                  alt={`${worker.first_name} ${worker.last_name}`}
+                  className="h-12 w-12 rounded-full"
+                />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-lg font-medium text-gray-900 truncate">
+                  {worker.first_name} {worker.last_name}
+                </p>
+                <p className="text-sm text-gray-500 truncate">
+                  {worker.years_exp} years of experience
+                </p>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-lg font-medium text-gray-900 truncate">
-                {worker.first_name} {worker.last_name}
-              </p>
-              <p className="text-sm text-gray-500 truncate">
-                {worker.years_exp} years of experience
-              </p>
-            </div>
-            <div>
-              {/* Star rating and number */}
+            <div className="flex items-center">
               <svg
                 className="text-yellow-400 w-5 h-5"
                 fill="currentColor"
@@ -99,9 +93,9 @@ const SearchResultsPage: React.FC = () => {
                   ? worker.reviews[0].rating
                   : "No Ratings"}
               </span>
-            </div>
-            <div className="text-lg">
-              <span className="text-gray-900 font-medium">${worker.rate}</span>
+              <span className="ml-3 text-lg font-medium text-gray-900">
+                ${worker.rate}
+              </span>
               <span className="text-gray-600">/h</span>
             </div>
           </div>

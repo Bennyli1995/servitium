@@ -28,7 +28,7 @@ const Footer: React.FC = () => {
           />
         </div>
         <div className="text-sm text-center mt-4 md:mt-0">
-          Copyright © NavCare 2024. All rights reserved
+          Copyright © Servitium 2024. All Rights Reserved.
         </div>
         <div className="mt-4 md:mt-0">
           <img

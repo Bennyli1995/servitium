@@ -1,28 +1,65 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import profilePic from "../assets/User.jpeg";
-import ReviewItem from "../components/ReviewItem";
 import { useAuth0 } from "@auth0/auth0-react";
 import ReviewModal from "../components/ReviewModal";
-
 import ImageComponentRounded from "./ImageComponentRounded";
+import ReviewItem from "../components/ReviewItem";
 
 const WorkerDetails: React.FC = () => {
   const { workerId } = useParams<{ workerId: string }>();
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
   const [worker, setWorker] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
-
   const { user, isAuthenticated } = useAuth0();
-  const [showReviewForm, setShowReviewForm] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [review, setReview] = useState({
     rating: 0,
     comment: "",
-    date: new Date().toISOString().split("T")[0], // format as 'YYYY-MM-DD'
+    date: new Date().toISOString().split("T")[0],
   });
 
-  const handleReviewSubmit = async (review) => {
+  const handleContactClick = () => {
+    navigate("/contact", { state: { email: worker.email } });
+  };
+
+  // Refactor fetchWorkerDetails into a separate function
+  const fetchWorkerDetails = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`http://localhost:5001/service_workers`);
+      const workers = await response.json();
+      const selectedWorker = workers.find((w) => `${w.worker_id}` === workerId);
+      if (selectedWorker) {
+        selectedWorker.reviews.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+      }
+      setWorker(selectedWorker);
+    } catch (error) {
+      console.error("Failed to fetch worker details:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchWorkerDetails();
+  }, [workerId]);
+
+  const calculateAverageRating = (reviews) => {
+    if (!reviews || reviews.length === 0) {
+      return "No reviews";
+    }
+    const total = reviews.reduce((acc, review) => {
+      const rating = parseFloat(review.rating);
+      return acc + (isNaN(rating) ? 0 : rating);
+    }, 0);
+    return (total / reviews.length).toFixed(1);
+  };
+
+  const handleReviewSubmit = async (submittedReview) => {
     if (isAuthenticated && user) {
       try {
         const response = await fetch("http://localhost:5001/add_review", {
@@ -31,64 +68,29 @@ const WorkerDetails: React.FC = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            userID: user.sub, // Auth0 user identifier
+            userID: user.sub,
             tradespersonID: workerId,
-            rating: review.rating,
-            comment: review.comment,
+            rating: submittedReview.rating,
+            comment: submittedReview.comment,
             date: new Date().toISOString().split("T")[0],
           }),
         });
-
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        // Handle success, such as closing the form and showing a message
+        // Close the modal and show success message
         setIsReviewModalOpen(false);
-        // Refresh the reviews or show a success message...
+        setShowSuccessMessage(true);
+        fetchWorkerDetails(); // Refresh worker details
+
+        // Reset the success message after a delay
+        setTimeout(() => {
+          setShowSuccessMessage(false);
+        }, 3000);
       } catch (error) {
         console.error("Failed to submit review:", error);
       }
     }
-  };
-
-  useEffect(() => {
-    const fetchWorkerDetails = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(`http://localhost:5001/service_workers`);
-        const workers = await response.json();
-        const selectedWorker = workers.find(
-          (w) => `${w.worker_id}` === workerId
-        );
-        if (selectedWorker) {
-          // Sort reviews by date from most recent to least recent
-          selectedWorker.reviews.sort(
-            (a, b) => new Date(b.date) - new Date(a.date)
-          );
-        }
-        setWorker(selectedWorker);
-      } catch (error) {
-        console.error("Failed to fetch worker details:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchWorkerDetails();
-  }, [workerId]);
-
-  const calculateAverageRating = (reviews) => {
-    if (!reviews || reviews.length === 0) {
-      return "No reviews";
-    }
-
-    const total = reviews.reduce((acc, review) => {
-      const rating = parseFloat(review.rating);
-      return acc + (isNaN(rating) ? 0 : rating);
-    }, 0);
-
-    return (total / reviews.length).toFixed(1);
   };
 
   if (isLoading) {
@@ -122,11 +124,6 @@ const WorkerDetails: React.FC = () => {
           <div className="p-8">
             <div className="text-center mb-4">
               <ImageComponentRounded imageUrl={worker.headshot} />
-              {/* <img
-                className="w-24 h-24 rounded-full mx-auto"
-                src={i1}
-                alt="Worker profile"
-              /> */}
               <h1 className="text-xl font-bold mt-2">
                 {worker.first_name} {worker.last_name}
               </h1>
@@ -171,7 +168,6 @@ const WorkerDetails: React.FC = () => {
                   </span>
                 ))}
               </div>
-              {/* Reviews Section */}
               <div className="mt-8 bg-gray-100 p-4 rounded-lg w-full">
                 <h2 className="text-lg font-bold mb-4">Reviews</h2>
                 {worker.reviews.length > 0 ? (
@@ -182,12 +178,12 @@ const WorkerDetails: React.FC = () => {
                   <div>No reviews yet.</div>
                 )}
               </div>
-              <div className="flex space-x-4 justify-center mt-8">
-                <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l">
-                  Message
-                </button>
-                <button className="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-r">
-                  Book Now
+              <div className="flex space-x-8 justify-center mt-8">
+                <button
+                  onClick={handleContactClick}
+                  className="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-r"
+                >
+                  Contact
                 </button>
                 <button
                   className="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded-r"
@@ -206,6 +202,18 @@ const WorkerDetails: React.FC = () => {
           </div>
         </div>
       </div>
+      {showSuccessMessage && (
+        <div
+          className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+          role="alert"
+        >
+          <strong className="font-bold">Success!</strong>
+          <span className="block sm:inline">
+            {" "}
+            Your review has been submitted.
+          </span>
+        </div>
+      )}
     </div>
   );
 };
