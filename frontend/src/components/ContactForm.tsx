@@ -1,7 +1,6 @@
 import React, { useState, FormEvent, useEffect } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-import { useHistory } from "react-router-dom";
 
 interface FormData {
   toEmail: string;
@@ -14,7 +13,6 @@ interface LocationState {
 }
 
 const ContactForm = () => {
-  const history = useHistory();
   const [notification, setNotification] = useState({
     message: "",
     isVisible: false,
@@ -34,7 +32,6 @@ const ContactForm = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(emailData);
 
     fetch("http://localhost:5001/send-email", {
       method: "POST",
@@ -56,7 +53,6 @@ const ContactForm = () => {
 
         setTimeout(() => {
           setNotification({ ...notification, isVisible: false }); // Hide notification
-          history.push("/"); // Redirect to home page
         }, 2000); // 2 seconds delay
       })
       .catch((err) => console.log(err));
