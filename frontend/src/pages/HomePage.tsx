@@ -17,17 +17,17 @@ const categories = [
 const testimonials = [
   {
     quote:
-      "NavCare made it easy for me to find someone to fix my porch. Highly recommend!",
+      "Servitium made it easy for me to find someone to fix my porch. Highly recommend!",
     author: "Jane Doe",
   },
   {
     quote:
-      "NavCare is different in that you get instantaneous responses, nothing else like it!",
+      "Servitium is different in that you get instantaneous responses, nothing else like it!",
     author: "John Doe",
   },
   {
     quote:
-      "NavCare made it easy for me to find someone to fix my phone in under an hour. Best app ever!",
+      "Servitium made it easy for me to find someone to fix my phone in under an hour. Best app ever!",
     author: "Josh Smith ",
   },
 ];

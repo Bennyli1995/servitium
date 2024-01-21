@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import emailjs from "emailjs-com";
 
 const ContactForm = ({ workerEmail }) => {
   const navigate = useNavigate();
@@ -20,24 +21,24 @@ const ContactForm = ({ workerEmail }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would send formData to your backend service to send the email
     try {
-      const response = await fetch("http://localhost:5001/send_email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const templateParams = {
+        // Add all required template parameters here
+        from_name: formData.firstName + " " + formData.lastName,
+        message: formData.comments,
+        to_email: workerEmail, // Email of the worker
+        reply_to: formData.email,
+      };
 
-      if (response.ok) {
-        // Handle success
-        console.log("Email sent successfully");
-        navigate("/success"); // Redirect to a success page
-      } else {
-        // Handle error
-        throw new Error("Failed to send email");
-      }
+      await emailjs.send(
+        "service_krgmu4p", // Replace with your EmailJS service ID
+        "your_template_id", // Replace with your EmailJS template ID
+        templateParams,
+        "your_user_id" // Replace with your EmailJS user ID
+      );
+
+      console.log("Email sent successfully");
+      navigate("/success"); // Redirect to a success page
     } catch (error) {
       console.error("Failed to send email:", error);
     }

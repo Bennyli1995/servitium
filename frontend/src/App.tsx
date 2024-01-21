@@ -11,6 +11,7 @@ import WorkerDetailsPage from "./pages/WorkerDetailsPage";
 import LoginPage from "./pages/LoginPage";
 import SearchResultsPage from "./pages/SearchResultsPage";
 import ContactForm from "./components/ContactForm";
+import ProtectedRoute from "./pages/ProctedPage";
 
 const App: React.FC = () => {
   return (
@@ -20,7 +21,22 @@ const App: React.FC = () => {
           <Header /> {/* This will always be displayed */}
           <main className="flex-grow">
             <Routes>
-              <Route path="/login" element={<LoginPage />} />
+              <Route
+                path="/home"
+                element={
+                  <ProtectedRoute>
+                    <HomePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <HomePage />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/home" element={<HomePage />} />
               <Route path="/" element={<HomePage />} />
               <Route path="/profile" element={<ProfilePage />} />
