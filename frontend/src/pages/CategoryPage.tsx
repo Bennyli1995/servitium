@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import profilePic from "../assets/User.jpeg";
+import ImageComponent from "./ImageComponent";
 
 const CategoryPage: React.FC = () => {
   const { categoryLabel } = useParams();
@@ -57,12 +58,14 @@ const CategoryPage: React.FC = () => {
           >
             <div className="flex items-center space-x-4">
               <div className="flex-shrink-0">
-                <img
+              <ImageComponent imageUrl={worker.headshot}/>
+                {/* <img
                   src={profilePic}
                   alt={`${worker.first_name} ${worker.last_name}`}
                   className="h-12 w-12 rounded-fullx"
-                />
+                /> */}
               </div>
+              {/* <ImageComponent imageUrl={worker.headshot} /> */}
               <div className="flex-1 min-w-0">
                 <p className="text-lg font-medium text-gray-900 truncate">
                   {worker.first_name} {worker.last_name}
