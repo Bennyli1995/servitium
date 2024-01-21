@@ -27,3 +27,7 @@ export async function getWorkerRecommendation(userMessage: string) {
     throw new Error('Failed to get worker recommendation from OpenAI.');
   }
 }
+
+export function findRecommendations(response: string) {
+    
+}

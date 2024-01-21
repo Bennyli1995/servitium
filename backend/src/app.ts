@@ -9,7 +9,7 @@ import WorkerModel from "./models/worker";
 
 import ReviewModel from "./models/review";
 
-import { getWorkerRecommendation } from "./util/recommendations";
+import { getWorkerRecommendation, findRecommendations } from "./util/recommendations";
 // import TradesPerson from "./models/tradespeople"; // Corrected import
 
 const app = express();
@@ -66,7 +66,9 @@ app.post('/recommend', async (req, res) => {
     "You will give the result of my query in the following format: " + 
     "Result: {cheapest_id: 1, second_cheapest_id: 2, third_cheapest_id: 3}";
 
-    const workerRecommendation = await getWorkerRecommendation(gpt_prompt);
+    let workerRecommendation = await getWorkerRecommendation(gpt_prompt);
+
+    // workerRecommendation = findRecommendations(workerRecommendation.message.content);
 
     res.json({ recommendation: workerRecommendation });
     console.log(workerRecommendation.message.content);
