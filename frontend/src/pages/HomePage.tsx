@@ -15,7 +15,7 @@ const categories = [
   { label: "Lawn Care" },
   { label: "Carpentry" },
   { label: "Insurance" },
-  { label: "Painting" },
+  { label: "Misc" },
 ];
 
 const testimonials = [
@@ -72,7 +72,7 @@ const HomePage: React.FC = () => {
     <div className="min-h-screen px-4 sm:px-6 lg:px-8">
       {/* Section for categories */}
       <h2 className="text-4xl font-bold text-center mt-12 mb-10 text-gray-800">
-        Popular Categories
+        What service are you looking for?
       </h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 p-6 rounded-lg shadow-md">
         {categories.map((category) => (
