@@ -22,8 +22,15 @@ export async function getWorkerRecommendation(userMessage: string) {
       { headers }
     );
 
+    console.log(response.data.choices[0].message.content);
     // Extract and return the recommended worker_id from the OpenAI response
-    return response.data.choices[0];
+    let recommendations = findRecommendations(response.data.choices[0].message.content);
+    if (recommendations) {
+      return recommendations
+    } else {
+      return null;
+    }
+
   } catch (error: any) {
     console.error("OpenAI Error:", error.message);
     throw new Error("Failed to get worker recommendation from OpenAI.");
