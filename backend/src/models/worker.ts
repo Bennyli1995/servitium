@@ -14,6 +14,7 @@ const workerSchema = new Schema({
     licenses: { type: [String], required: true },
     reviews: { type: [], required: false }, // Assuming reviews are strings, you can adjust this as needed
     schedule: { type: [String], required: false }, // Assuming schedule information is strings, you can adjust this as needed
+    email: { type: String, required: true },
 }, { timestamps: true });
 
 type Worker = InferSchemaType<typeof workerSchema>;

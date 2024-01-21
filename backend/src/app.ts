@@ -96,11 +96,6 @@ app.post("/add_review", async (req, res) => {
     // // Save the review to MongoDB
     await newReview.save();
 
-    // // Update the worker's reviews array
-    // worker.reviews?.push(newReview);
-
-    // // Save the updated worker to MongoDB
-    // await worker.save();
 
     res.status(201).json({ message: "Review added successfully" });
   } catch (error) {
