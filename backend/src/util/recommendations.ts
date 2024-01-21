@@ -52,7 +52,7 @@ export function findRecommendations(response: String) {
         'second_recommended_id' in resultObject &&
         'third_recommended_id' in resultObject
       ) {
-        return resultObject;
+        return [resultObject.first_recommended_id, resultObject.second_recommended_id, resultObject.third_recommended_id];
       }
     }
 
