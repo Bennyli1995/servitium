@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const ImageComponent = ({ imageUrl }) => {
   const [imageSrc, setImageSrc] = useState(null);
@@ -11,7 +11,7 @@ const ImageComponent = ({ imageUrl }) => {
         const url = URL.createObjectURL(blob);
         setImageSrc(url);
       } catch (error) {
-        console.error('Error loading image:', error);
+        console.error("Error loading image:", error);
       }
     };
 
@@ -20,8 +20,13 @@ const ImageComponent = ({ imageUrl }) => {
 
   return (
     <div>
-      {imageSrc && <img src={imageSrc} className="h-12 w-12 rounded-fullx"
-      alt="Loaded from URL" />}
+      {imageSrc && (
+        <img
+          src={imageSrc}
+          className="h-12 w-12 rounded-full"
+          alt="Loaded from URL"
+        />
+      )}
     </div>
   );
 };
