@@ -24,17 +24,18 @@ const SearchResultsPage: React.FC = () => {
 
         
         let recData: any = await recResponse.json();
-        let recDataResponse = recData.response;
 
-        const workersResponse = await fetch(
-          "http://localhost:5001/service_workers"
-        );
-        const workersData = await workersResponse.json();
-        const filteredWorkers = workersData.filter((worker) =>
-          recDataResponse.includes(worker.worker_id)
-        );
-
-        setRecommendedWorkers(filteredWorkers);
+        if (isMounted) {
+          const recDataResponse = recData.response;
+          const workersResponse = await fetch(
+            "http://localhost:5001/service_workers"
+          );
+          const workersData = await workersResponse.json();
+          const filteredWorkers = workersData.filter((worker) =>
+            recDataResponse.includes(worker.worker_id)
+          );
+          setRecommendedWorkers(filteredWorkers);
+        }
       } catch (error) {
         console.error("Failed to fetch recommendations:", error);
       } finally {
