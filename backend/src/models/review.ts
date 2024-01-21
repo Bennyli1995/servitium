@@ -1,7 +1,7 @@
 import { InferSchemaType, model, Schema } from "mongoose";
 
 const reviewSchema = new Schema({
-    _id: { type: String, required: true },
+    // _id: { type: String, required: true },
     review_id: { type: Number, required: true },
     userID: { type: Number, required: true },
     tradespersonID: { type: Number, required: true },
@@ -12,7 +12,7 @@ const reviewSchema = new Schema({
 
 type Review = InferSchemaType<typeof reviewSchema>;
 
-reviewSchema.set('validateBeforeSave', false);
+// reviewSchema.set('validateBeforeSave', false);
 
 
 export default model<Review>("reviews", reviewSchema);
