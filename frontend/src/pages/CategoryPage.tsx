@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-// import mockData from "../Fakers/fakeServiceWorkers";
 import profilePic from "../assets/User.jpeg";
 
 const CategoryPage: React.FC = () => {
@@ -15,7 +14,9 @@ const CategoryPage: React.FC = () => {
       setIsLoading(true);
       try {
         // Adjust the URL according to your server configuration
-        const response = await fetch(`http://localhost:5001/service_workers`);
+        const response = await fetch(
+          `http://localhost:5001/service_workers/${categoryLabel}`
+        );
         const data = await response.json();
         const filteredWorkers = data.filter(
           (worker) => worker.trade.toLowerCase() === categoryLabel.toLowerCase()
@@ -42,6 +43,12 @@ const CategoryPage: React.FC = () => {
       </h1>
       {/* Iterate over the workers to display them */}
       <div className="space-y-4">
+        <button
+          onClick={() => navigate(-1)}
+          className="text-sm font-semibold text-gray-600"
+        >
+          ← Back
+        </button>
         {workers.map((worker) => (
           <div
             key={worker.worker_id}

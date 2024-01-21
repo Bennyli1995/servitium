@@ -1,4 +1,3 @@
-// src/auth/auth0-provider-with-history.tsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
@@ -17,7 +16,7 @@ const Auth0ProviderWithHistory: React.FC = ({ children }) => {
     <Auth0Provider
       domain={domain}
       clientId={clientId}
-      redirectUri={window.location.origin + "/home"}
+      redirectUri="http://localhost:5173/home"
       onRedirectCallback={onRedirectCallback}
     >
       {children}
