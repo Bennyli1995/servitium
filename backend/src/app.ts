@@ -63,14 +63,17 @@ app.post('/recommend', async (req, res) => {
     " Choose the top three workers from the list, returning only their worker_ids in the content of your message. " +
     "Worker List: " + JSON.stringify(workers) + 
     "You will give the result of my query in this exact format: " + 
-    "Result: {cheapest_id: 1, second_cheapest_id: 2, third_cheapest_id: 3}";
+    "Result: {first_recommended_id: 1, second_recommended_id: 2, third_recommended_id: 3}, and then a reasoning behind each";
 
-    let workerRecommendation = await getWorkerRecommendation(gpt_prompt);
-    // let result = workerRecommendation.message.content;
-    let result = findRecommendations(workerRecommendation.message.content);
+    let result = null;
+    while (result == null) {
+      let workerRecommendation = await getWorkerRecommendation(gpt_prompt);
+      // console.log(workerRecommendation.message.content);
+      result = findRecommendations(workerRecommendation.message.content);
+    }
 
-    res.json({ recommendation: result });
-  } catch (error: any)  {
+    res.json({ response: result });
+  } catch (error: any) {
     console.error('Error:', error.message);
     res.status(500).json({ error: 'Internal Server Error' });
   }
