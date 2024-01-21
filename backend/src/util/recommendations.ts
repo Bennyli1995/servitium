@@ -48,9 +48,9 @@ export function findRecommendations(response: String) {
       // Validate the structure of the parsed object
       if (
         typeof resultObject === 'object' &&
-        'cheapest_id' in resultObject &&
-        'second_cheapest_id' in resultObject &&
-        'third_cheapest_id' in resultObject
+        'first_recommended_id' in resultObject &&
+        'second_recommended_id' in resultObject &&
+        'third_recommended_id' in resultObject
       ) {
         return resultObject;
       }
