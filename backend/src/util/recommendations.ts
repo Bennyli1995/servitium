@@ -29,3 +29,36 @@ export async function getWorkerRecommendation(userMessage: string) {
     throw new Error("Failed to get worker recommendation from OpenAI.");
   }
 }
+
+export type ResultObject = {
+  cheapest_id: number;
+  second_cheapest_id: number;
+  third_cheapest_id: number;
+};
+
+export function findRecommendations(response: String) {
+  try {
+    // Extract the part of the string between curly braces
+    const match = response.match(/\{(.+?)\}/)?.[0];
+
+    if (match) {
+      // Parse the extracted JSON string
+      const resultObject = JSON.parse(match);
+      
+      // Validate the structure of the parsed object
+      if (
+        typeof resultObject === 'object' &&
+        'cheapest_id' in resultObject &&
+        'second_cheapest_id' in resultObject &&
+        'third_cheapest_id' in resultObject
+      ) {
+        return resultObject;
+      }
+    }
+
+    return null;
+  } catch (error:any) {
+    console.error('Error parsing result string:', error.message);
+    return null;
+  }
+}

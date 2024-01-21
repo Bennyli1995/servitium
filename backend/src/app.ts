@@ -9,7 +9,7 @@ import WorkerModel from "./models/worker";
 
 import ReviewModel from "./models/review";
 
-import { getWorkerRecommendation } from "./util/recommendations";
+import { getWorkerRecommendation, findRecommendations } from "./util/recommendations";
 // import TradesPerson from "./models/tradespeople"; // Corrected import
 
 const app = express();
@@ -55,21 +55,21 @@ app.get("/service_workers", async (req, res) => {
 // POST request for recommendation
 app.post('/recommend', async (req, res) => {
   try {
-    let workers = await WorkerModel.find().exec();
+    const workers = await WorkerModel.find().exec();
     
-    const { message, trade } = req.body;
-    workers = workers.filter(worker => worker.trade === trade);
+    const { message } = req.body;
 
     const gpt_prompt = "Request: " + message +
     " Choose the top three workers from the list, returning only their worker_ids in the content of your message. " +
     "Worker List: " + JSON.stringify(workers) + 
-    "You will give the result of my query in the following format: " + 
+    "You will give the result of my query in this exact format: " + 
     "Result: {cheapest_id: 1, second_cheapest_id: 2, third_cheapest_id: 3}";
 
-    const workerRecommendation = await getWorkerRecommendation(gpt_prompt);
+    let workerRecommendation = await getWorkerRecommendation(gpt_prompt);
+    // let result = workerRecommendation.message.content;
+    let result = findRecommendations(workerRecommendation.message.content);
 
-    res.json({ recommendation: workerRecommendation });
-    console.log(workerRecommendation.message.content);
+    res.json({ recommendation: result });
   } catch (error: any) {
     console.error('Error:', error.message);
     res.status(500).json({ error: 'Internal Server Error' });
