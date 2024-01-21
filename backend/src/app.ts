@@ -1,6 +1,8 @@
 import "dotenv/config";
 import express from "express";
 const cors = require("cors");
+const nodemailer = require("nodemailer");
+const twilio = require("twilio");
 import bodyParser from "body-parser";
 
 // import NoteModel from "./models/note";
@@ -19,9 +21,14 @@ import {
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 // app.use(bodyParser.json()); // Add this line to enable JSON body parsing
 // app.use(bodyParser.urlencoded({ extended: true })); // Add this line to enable URL-encoded body parsing
+
+app.get("/", (req, res) => {
+  res.send("Working");
+});
 
 app.get("/service_workers", async (req, res) => {
   try {
@@ -53,6 +60,50 @@ app.get("/service_workers", async (req, res) => {
     let errorMessage = "An unknown error occurred";
     if (error instanceof Error) errorMessage = error.message;
     res.status(500).json({ error: errorMessage });
+  }
+});
+
+// Configure Nodemailer
+const transporter = nodemailer.createTransport({
+  service: "gmail", // Replace with your email provider
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
+
+// Configure Twilio
+const twilioClient = new twilio(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
+
+// Endpoint to send email and alert
+app.post("/send-email", async (req, res) => {
+  const { toEmail, subject, body } = req.body;
+
+  console.log(toEmail, subject, body);
+
+  try {
+    // Send email
+    transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: toEmail,
+      subject: subject,
+      text: body,
+    });
+
+    // Send alert via Twilio SMS
+    await twilioClient.messages.create({
+      body: `Email sent to ${toEmail}`,
+      to: process.env.MY_PHONE_NUMBER, // Your phone number for alerts
+      from: process.env.TWILIO_PHONE_NUMBER,
+    });
+
+    res.send("Email sent and alert triggered");
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("An error occurred");
   }
 });
 

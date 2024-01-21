@@ -209,7 +209,6 @@ const WorkerDetails: React.FC = () => {
         >
           <strong className="font-bold">Success!</strong>
           <span className="block sm:inline">
-            {" "}
             Your review has been submitted.
           </span>
         </div>

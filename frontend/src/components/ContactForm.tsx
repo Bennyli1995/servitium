@@ -1,115 +1,83 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
-import emailjs from "emailjs-com";
+import React, { useState, FormEvent, useEffect } from "react";
+import axios from "axios";
+import { useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
-const ContactForm = ({ workerEmail }) => {
-  const navigate = useNavigate();
-  const { user } = useAuth0();
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    phone: "",
-    email: workerEmail || user?.email || "",
-    comments: "",
+interface FormData {
+  toEmail: string;
+  subject: string;
+  body: string;
+}
+
+interface LocationState {
+  email: string;
+}
+
+const ContactForm = () => {
+  const history = useHistory();
+  const [notification, setNotification] = useState({
+    message: "",
+    isVisible: false,
+  });
+  const location = useLocation<LocationState>();
+  const [emailData, setEmailData] = useState<FormData>({
+    toEmail: location.state?.email || "",
+    subject: "",
+    body: "",
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setEmailData({ ...emailData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const templateParams = {
-        // Add all required template parameters here
-        from_name: formData.firstName + " " + formData.lastName,
-        message: formData.comments,
-        to_email: workerEmail, // Email of the worker
-        reply_to: formData.email,
-      };
+    console.log(emailData);
 
-      await emailjs.send(
-        "service_krgmu4p", // Replace with your EmailJS service ID
-        "your_template_id", // Replace with your EmailJS template ID
-        templateParams,
-        "your_user_id" // Replace with your EmailJS user ID
-      );
+    fetch("http://localhost:5001/send-email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(emailData),
+    })
+      .then(() => {
+        setNotification({
+          message: "Email sent successfully!",
+          isVisible: true,
+        });
+        setEmailData({
+          toEmail: "",
+          subject: "",
+          body: "",
+        });
 
-      console.log("Email sent successfully");
-      navigate("/success"); // Redirect to a success page
-    } catch (error) {
-      console.error("Failed to send email:", error);
-    }
+        setTimeout(() => {
+          setNotification({ ...notification, isVisible: false }); // Hide notification
+          history.push("/"); // Redirect to home page
+        }, 2000); // 2 seconds delay
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
-    <div className="max-w-md mx-auto my-10 p-8 bg-white rounded-md shadow-lg">
-      <h2 className="text-2xl font-bold mb-6 text-center">Contact Form</h2>
+    <div className="container mx-auto my-8 p-6 max-w-md bg-white rounded shadow">
+      <h2 className="text-2xl font-bold mb-4">Contact Form</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label
-            htmlFor="firstName"
             className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="toEmail"
           >
-            First Name
-          </label>
-          <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleInputChange}
-            required
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="lastName"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Last Name
-          </label>
-          <input
-            type="text"
-            id="lastName"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleInputChange}
-            required
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="phone"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Phone
-          </label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            value={formData.phone}
-            onChange={handleInputChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="email"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Email Address
+            To Email
           </label>
           <input
             type="email"
-            id="email"
-            name="email"
-            value={formData.email}
+            id="toEmail"
+            name="toEmail"
+            value={emailData.toEmail}
             onChange={handleInputChange}
             required
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -117,18 +85,35 @@ const ContactForm = ({ workerEmail }) => {
         </div>
         <div className="mb-4">
           <label
-            htmlFor="comments"
             className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="subject"
           >
-            Comments
+            Subject
+          </label>
+          <input
+            type="text"
+            id="subject"
+            name="subject"
+            value={emailData.subject}
+            onChange={handleInputChange}
+            required
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+        </div>
+        <div className="mb-6">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="body"
+          >
+            Message
           </label>
           <textarea
-            id="comments"
-            name="comments"
-            value={formData.comments}
+            id="body"
+            name="body"
+            value={emailData.body}
             onChange={handleInputChange}
-            rows="3"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>
         <div className="flex items-center justify-between">
@@ -136,9 +121,17 @@ const ContactForm = ({ workerEmail }) => {
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
-            Send
+            Send Email
           </button>
         </div>
+        {notification.isVisible && (
+          <div
+            className="mt-4 p-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"
+            role="alert"
+          >
+            {notification.message}
+          </div>
+        )}
       </form>
     </div>
   );
