@@ -81,26 +81,20 @@ app.post("/add_review", async (req, res) => {
   try {
     const { userID, tradespersonID, rating, comment, date } = req.body;
 
-    console.log(userID);
-    // // Assuming you have a worker with the provided tradespersonID
-    // const worker = await WorkerModel.findOne({ worker_id: tradespersonID });
+    // console.log(userID);
 
-    // if (!worker) {
-    //   return res.status(404).json({ error: "Tradesperson not found" });
-    // }
-
-    // // Create a new review instance
-    // const newReview: Review = new ReviewModel({
-    //   review_id: Math.floor(Math.random() * 1000) + 1,
-    //   userID,
-    //   tradespersonID,
-    //   rating,
-    //   comment,
-    //   date,
-    // });
+    // Create a new review instance
+    const newReview = new ReviewModel({
+      review_id: Math.floor(Math.random() * 1000) + 1,
+      userID,
+      tradespersonID,
+      rating,
+      comment,
+      date,
+    });
 
     // // Save the review to MongoDB
-    // await newReview.save();
+    await newReview.save();
 
     // // Update the worker's reviews array
     // worker.reviews?.push(newReview);

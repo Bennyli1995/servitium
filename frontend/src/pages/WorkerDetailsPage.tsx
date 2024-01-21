@@ -74,7 +74,7 @@ const WorkerDetails: React.FC = () => {
       >
         ← Back
       </button>
-      <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden">
+      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
         <div className="md:flex">
           <div className="p-8">
             <div className="text-center mb-4">
