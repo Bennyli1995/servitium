@@ -12,4 +12,7 @@ const reviewSchema = new Schema({
 
 type Review = InferSchemaType<typeof reviewSchema>;
 
+reviewSchema.set('validateBeforeSave', false);
+
+
 export default model<Review>("reviews", reviewSchema);
