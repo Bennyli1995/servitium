@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-blue-700 text-gray-400">
+    <footer className="bg-[#E1824F] text-black-400">
       <div className="max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
         <div className="flex justify-center gap-8 mb-4 md:mb-0">
           <SocialIcon
