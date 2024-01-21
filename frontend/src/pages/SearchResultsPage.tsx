@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import profilePic from "../assets/User.jpeg"; // Update the import path as necessary
 
 const SearchResultsPage: React.FC = () => {
   const navigate = useNavigate();
-  const { prompt } = useParams();
+  const location = useLocation();
+  const query = new URLSearchParams(location.search).get("query");
   const [recommendedWorkers, setRecommendedWorkers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -15,7 +16,7 @@ const SearchResultsPage: React.FC = () => {
         const recResponse = await fetch("http://localhost:5001/recommend", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: prompt }),
+          body: JSON.stringify({ message: query }),
         });
 
         const recData = await recResponse.json();
@@ -32,16 +33,15 @@ const SearchResultsPage: React.FC = () => {
         setRecommendedWorkers(filteredWorkers);
       } catch (error) {
         console.error("Failed to fetch recommendations:", error);
-        // Optionally, handle the error more visibly to the user
       } finally {
         setIsLoading(false);
       }
     };
 
-    if (prompt) {
+    if (query) {
       fetchRecommendations();
     }
-  }, [prompt]);
+  }, [query]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -53,7 +53,7 @@ const SearchResultsPage: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {workers.map((worker) => (
+      {recommendedWorkers.map((worker) => (
         <div
           key={worker.worker_id}
           className="p-4 mb-4 border rounded-lg shadow-md bg-white cursor-pointer hover:shadow-lg"
@@ -76,6 +76,7 @@ const SearchResultsPage: React.FC = () => {
               </p>
             </div>
             <div>
+              {/* Star rating and number */}
               <svg
                 className="text-yellow-400 w-5 h-5"
                 fill="currentColor"
