@@ -5,6 +5,8 @@ import ReviewItem from "../components/ReviewItem";
 import { useAuth0 } from "@auth0/auth0-react";
 import ReviewModal from "../components/ReviewModal";
 
+import ImageComponentRounded from "./ImageComponentRounded";
+
 const WorkerDetails: React.FC = () => {
   const { workerId } = useParams<{ workerId: string }>();
   const navigate = useNavigate();
@@ -119,11 +121,12 @@ const WorkerDetails: React.FC = () => {
         <div className="md:flex">
           <div className="p-8">
             <div className="text-center mb-4">
-              <img
+            <ImageComponentRounded imageUrl={worker.headshot}/>
+              {/* <img
                 className="w-24 h-24 rounded-full mx-auto"
                 src={profilePic}
                 alt="Worker profile"
-              />
+              /> */}
               <h1 className="text-xl font-bold mt-2">
                 {worker.first_name} {worker.last_name}
               </h1>

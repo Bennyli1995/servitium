@@ -70,7 +70,7 @@ app.post('/recommend', async (req, res) => {
     let result = findRecommendations(workerRecommendation.message.content);
 
     res.json({ recommendation: result });
-  } catch (error: any) {
+  } catch (error: any)  {
     console.error('Error:', error.message);
     res.status(500).json({ error: 'Internal Server Error' });
   }
