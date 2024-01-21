@@ -4,29 +4,32 @@ import profilePic from "../assets/User.jpeg"; // Update the import path as neces
 
 const SearchResultsPage: React.FC = () => {
   const navigate = useNavigate();
-  const { prompt } = useParams();
+  const prompt = useParams();
   const [recommendedWorkers, setRecommendedWorkers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchRecommendations = async () => {
       setIsLoading(true);
       try {
-        const recResponse = await fetch("http://localhost:5001/recommend", {
+        const recResponse: any = await fetch("http://localhost:5001/recommend", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: prompt }),
         });
 
-        const recData = await recResponse.json();
-        const ids = recData.map((item) => item.worker_id);
+        
+        let recData: any = await recResponse.json();
+        let recDataResponse = recData.response;
 
         const workersResponse = await fetch(
           "http://localhost:5001/service_workers"
         );
         const workersData = await workersResponse.json();
         const filteredWorkers = workersData.filter((worker) =>
-          ids.includes(worker.worker_id)
+          recDataResponse.includes(worker.worker_id)
         );
 
         setRecommendedWorkers(filteredWorkers);
@@ -41,6 +44,11 @@ const SearchResultsPage: React.FC = () => {
     if (prompt) {
       fetchRecommendations();
     }
+
+    // Cleanup function to handle unmounting
+    return () => {
+      isMounted = false;
+    };
   }, [prompt]);
 
   if (isLoading) {
@@ -53,7 +61,7 @@ const SearchResultsPage: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {workers.map((worker) => (
+      {recommendedWorkers.map((worker) => (
         <div
           key={worker.worker_id}
           className="p-4 mb-4 border rounded-lg shadow-md bg-white cursor-pointer hover:shadow-lg"

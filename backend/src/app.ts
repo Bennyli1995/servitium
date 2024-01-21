@@ -66,12 +66,20 @@ app.post('/recommend', async (req, res) => {
     "Result: {first_recommended_id: 1, second_recommended_id: 2, third_recommended_id: 3}";
 
     let workerRecommendation;
-    while (workerRecommendation == null) {
-      workerRecommendation = await getWorkerRecommendation(gpt_prompt);
+    let attempts = 0;
+    const maxAttempts = 3; 
+    while (workerRecommendation == null && attempts < maxAttempts) {
+      try {
+        workerRecommendation = await getWorkerRecommendation(gpt_prompt);
+      } catch {
+        // pass
+      }
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      attempts++;
     }
 
-    res.json({ response: workerRecommendation });
     console.log(workerRecommendation);
+    res.json({ response: workerRecommendation });
   } catch (error: any) {
     console.error('Error:', error.message);
     res.status(500).json({ error: 'Internal Server Error' });

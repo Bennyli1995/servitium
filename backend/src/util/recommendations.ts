@@ -22,9 +22,8 @@ export async function getWorkerRecommendation(userMessage: string) {
       { headers }
     );
 
-    console.log(response.data.choices[0].message.content);
     // Extract and return the recommended worker_id from the OpenAI response
-    let recommendations = findRecommendations(response.data.choices[0].message.content);
+    let recommendations = findRecommendations(JSON.stringify(response.data.choices[0].message.content));
     if (recommendations) {
       return recommendations
     } else {
@@ -38,34 +37,25 @@ export async function getWorkerRecommendation(userMessage: string) {
 }
 
 export type ResultObject = {
-  cheapest_id: number;
-  second_cheapest_id: number;
-  third_cheapest_id: number;
+  first_recommended_id: number;
+  second_recommended_id: number;
+  third_recommended_id: number;
 };
 
-export function findRecommendations(response: String) {
+export function findRecommendations(response: string) {
   try {
-    // Extract the part of the string between curly braces
-    const match = response.match(/\{(.+?)\}/)?.[0];
+    // Extract the numbers from the string using a regular expression
+    const matches = response.match(/\d+/g);
 
-    if (match) {
-      // Parse the extracted JSON string
-      const resultObject = JSON.parse(match);
-      
-      // Validate the structure of the parsed object
-      if (
-        typeof resultObject === 'object' &&
-        'first_recommended_id' in resultObject &&
-        'second_recommended_id' in resultObject &&
-        'third_recommended_id' in resultObject
-      ) {
-        return [resultObject.first_recommended_id, resultObject.second_recommended_id, resultObject.third_recommended_id];
-      }
+    if (matches && matches.length >= 3) {
+      // Return the first three numbers found
+      return [parseInt(matches[0], 10), parseInt(matches[1], 10), parseInt(matches[2], 10)];
     }
 
     return null;
-  } catch (error:any) {
+  } catch (error: any) {
     console.error('Error parsing result string:', error.message);
     return null;
   }
 }
+
