@@ -2,12 +2,53 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import profilePic from "../assets/User.jpeg";
 import ReviewItem from "../components/ReviewItem";
+import { useAuth0 } from "@auth0/auth0-react";
+import ReviewModal from "../components/ReviewModal";
 
 const WorkerDetails: React.FC = () => {
   const { workerId } = useParams<{ workerId: string }>();
   const navigate = useNavigate();
   const [worker, setWorker] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const { user, isAuthenticated } = useAuth0();
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [review, setReview] = useState({
+    rating: 0,
+    comment: "",
+    date: new Date().toISOString().split("T")[0], // format as 'YYYY-MM-DD'
+  });
+
+  const handleReviewSubmit = async (review) => {
+    if (isAuthenticated && user) {
+      try {
+        const response = await fetch("http://localhost:5001/add_review", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userID: user.sub, // Auth0 user identifier
+            tradespersonID: workerId,
+            rating: review.rating,
+            comment: review.comment,
+            date: new Date().toISOString().split("T")[0],
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Handle success, such as closing the form and showing a message
+        setIsReviewModalOpen(false);
+        // Refresh the reviews or show a success message...
+      } catch (error) {
+        console.error("Failed to submit review:", error);
+      }
+    }
+  };
 
   useEffect(() => {
     const fetchWorkerDetails = async () => {
@@ -137,9 +178,18 @@ const WorkerDetails: React.FC = () => {
                 <button className="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-r">
                   Book Now
                 </button>
-                <button className="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded-r">
+                <button
+                  className="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded-r"
+                  onClick={() => setIsReviewModalOpen(true)}
+                >
                   Leave a Review
                 </button>
+                <ReviewModal
+                  workerName={worker?.first_name + " " + worker?.last_name}
+                  isOpen={isReviewModalOpen}
+                  onSubmit={handleReviewSubmit}
+                  onCancel={() => setIsReviewModalOpen(false)}
+                />
               </div>
             </div>
           </div>
