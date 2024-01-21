@@ -8,14 +8,17 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MapComponent from "../components/MapComponent";
 import axios from "axios";
+import Testimonial1 from "../assets/Testimonial1.png";
+import Testimonial2 from "../assets/Testimonial2.png";
+import Testimonial3 from "../assets/Testimonial3.png";
 
 const categories = [
   { label: "Electrical" },
   { label: "Plumbing" },
-  { label: "Lawning" },
+  { label: "Lawn Care" },
   { label: "Carpentry" },
   { label: "Insurance" },
-  { label: "Painting" },
+  { label: "Misc" },
 ];
 
 const testimonials = [
@@ -23,16 +26,19 @@ const testimonials = [
     quote:
       "Servitium made it easy for me to find someone to fix my porch. Highly recommend!",
     author: "Jane Doe",
+    photo: Testimonial1,
   },
   {
     quote:
       "Servitium is different in that you get instantaneous responses, nothing else like it!",
     author: "John Doe",
+    photo: Testimonial2,
   },
   {
     quote:
       "Servitium made it easy for me to find someone to fix my phone in under an hour. Best app ever!",
     author: "Josh Smith ",
+    photo: Testimonial3,
   },
 ];
 
@@ -72,7 +78,7 @@ const HomePage: React.FC = () => {
     <div className="min-h-screen px-4 sm:px-6 lg:px-8">
       {/* Section for categories */}
       <h2 className="text-4xl font-bold text-center mt-12 mb-10 text-gray-800">
-        Popular Categories
+        What service are you looking for?
       </h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 p-6 rounded-lg shadow-md">
         {categories.map((category) => (
@@ -86,9 +92,9 @@ const HomePage: React.FC = () => {
           <h3 className="text-4xl font-bold mb-12 text-gray-800">
             How It Works
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 items-stretch">
+          <div className="grid grid-cols-1 sm:grid-cols-3 items-stretch">
             <div className="flex flex-col items-center text-center space-y-4">
-              <img src={One} alt="Step 1" className="mb-4 h-24 w-24" />
+              <img src={One} alt="Step 1" className="mb-4 h-36 w-36" />
               <h4 className="text-xl sm:text-2xl font-semibold">
                 Step 1: Choose a Service
               </h4>
@@ -97,7 +103,7 @@ const HomePage: React.FC = () => {
               </p>
             </div>
             <div className="flex flex-col items-center text-center space-y-4">
-              <img src={Two} alt="Step 2" className="mb-4 h-24 w-24" />
+              <img src={Two} alt="Step 2" className="mb-4 h-36 w-36" />
               <h4 className="text-xl sm:text-2xl font-semibold">
                 Step 2: Book Online
               </h4>
@@ -106,7 +112,7 @@ const HomePage: React.FC = () => {
               </p>
             </div>
             <div className="flex flex-col items-center text-center space-y-4">
-              <img src={Three} alt="Step 3" className="mb-4 h-24 w-24" />
+              <img src={Three} alt="Step 3" className="mb-4 h-36 w-36" />
               <h4 className="text-xl sm:text-2xl font-semibold">
                 Step 3: Get It Done
               </h4>
@@ -124,12 +130,12 @@ const HomePage: React.FC = () => {
           What Our Users Say
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
+          {testimonials.map((testimonial, index, photo) => (
             <Testimonial
               key={index}
               quote={testimonial.quote}
               author={testimonial.author}
-              profilePic={testimonial.profilePic}
+              photo={testimonial.photo}
               companyLogo={testimonial.companyLogo}
             />
           ))}

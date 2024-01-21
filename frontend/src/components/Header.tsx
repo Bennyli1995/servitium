@@ -18,8 +18,8 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-gradient-to-r from-blue-600 to-blue-600 py-4 shadow-lg text-white">
-      <div className="max-w-5xl ml-48 flex justify-between items-center px-4 sm:px-6 lg:px-8">
+    <header className="bg-gradient-to-r from-[#E1824F] to-[#E1824F] py-4 shadow-lg text-white">
+      <div className="max-w-6xl mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <div className="flex items-center space-x-4">
           <Link to="/home" className="flex items-center">

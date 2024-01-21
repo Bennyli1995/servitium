@@ -24,7 +24,7 @@ const SearchBar: React.FC = () => {
       <input
         type="search"
         className="w-full rounded-full border border-neutral-300 pl-10 pr-4 py-3 text-neutral-700 focus:border-blue-500 focus:ring-0"
-        placeholder="Type in your question and we will do the rest!"
+        placeholder="Describe your problem and we will do the rest!"
         aria-label="Search"
         value={query}
         onChange={(e) => setQuery(e.target.value)}

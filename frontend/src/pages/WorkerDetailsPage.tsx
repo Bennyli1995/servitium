@@ -128,6 +128,12 @@ const WorkerDetails: React.FC = () => {
                 {worker.first_name} {worker.last_name}
               </h1>
               <div className="text-gray-500">
+                {worker.trade == "Electrical" ? (<span>Electrician</span>
+                ) : (
+                  <span>Plumber</span>
+                )}
+              </div>
+              <div className="text-gray-500">
                 {worker.years_exp} years of experience
               </div>
               <div className="flex justify-center items-center mt-2">
@@ -168,6 +174,20 @@ const WorkerDetails: React.FC = () => {
                   </span>
                 ))}
               </div>
+              <div className="mt-8 bg-gray-100 p-4 rounded-lg w-full">
+                <h2 className="text-lg font-bold mb-4">Certifications</h2>
+                <div className="flex justify-center flex-wrap gap-2">
+                  {worker.licenses.map((license) => (
+                    <span
+                      key={license}
+                      className="bg-gray-700 text-white px-3 py-1 rounded-full text-xs font-semibold"
+                    >
+                      {license}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
               <div className="mt-8 bg-gray-100 p-4 rounded-lg w-full">
                 <h2 className="text-lg font-bold mb-4">Reviews</h2>
                 {worker.reviews.length > 0 ? (

@@ -117,7 +117,8 @@ app.post("/recommend", async (req, res) => {
     const gpt_prompt =
       "Request: " +
       message +
-      " Choose the top three workers from the list, returning only their worker_ids in the content of your message. " +
+      " Use each worker object's trade, rate, description, skills and years_exp to choose the top three workers from the list, " +
+      "returning only their worker_ids in the content of your message. Only select workers from the appropriate trade for the problem described." +
       "Worker List: " +
       JSON.stringify(workers) +
       "You will give the result of my query in this exact format: " +

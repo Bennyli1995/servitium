@@ -11,8 +11,8 @@ import Carpentry from "../assets/Carpentry.png";
 export enum CategoryLabel {
   Electrical = "Electrical",
   Insurance = "Insurance",
-  Lawning = "Lawning",
-  Painting = "Painting",
+  Lawning = "Lawn Care",
+  Painting = "Misc",
   Plumbing = "Plumbing",
   Carpentry = "Carpentry",
 }
@@ -41,8 +41,8 @@ const Category: React.FC<CategoryProps> = ({ label }) => {
       to={path}
       className="flex flex-col items-center p-4 hover:bg-blue-300 rounded-lg cursor-pointer"
     >
-      <img src={imageSrc} alt={label} className="mb-2 h-32 w-32" />
-      <span className="text-md font-medium">{label}</span>
+      <img src={imageSrc} alt={label} className="mb-2 h-36 w-36" />
+      <span className="text-lg font-medium">{label}</span>
     </Link>
   );
 };
