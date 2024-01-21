@@ -50,6 +50,7 @@ const App: React.FC = () => {
               <Route path="/worker/:workerId" element={<WorkerDetailsPage />} />
               <Route path="/contact" element={<ContactForm />} />
               <Route path="/query-results" element={<QueryResultsPage />} />
+              <Route path = "/login" element={<LoginPage />} />
             </Routes>
           </main>
           <Footer />

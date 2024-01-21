@@ -11,7 +11,7 @@ import Carpentry from "../assets/Carpentry.png";
 export enum CategoryLabel {
   Electrical = "Electrical",
   Insurance = "Insurance",
-  Lawning = "Lawning",
+  Lawning = "Lawn Care",
   Painting = "Painting",
   Plumbing = "Plumbing",
   Carpentry = "Carpentry",

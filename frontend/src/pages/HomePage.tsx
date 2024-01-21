@@ -12,7 +12,7 @@ import axios from "axios";
 const categories = [
   { label: "Electrical" },
   { label: "Plumbing" },
-  { label: "Lawning" },
+  { label: "Lawn Care" },
   { label: "Carpentry" },
   { label: "Insurance" },
   { label: "Painting" },
