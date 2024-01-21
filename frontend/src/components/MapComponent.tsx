@@ -27,8 +27,10 @@ const MapComponent = ({ onLocationSelect }) => {
     }
   };
 
+  const libraries = ["places"];
+
   return (
-    <LoadScript googleMapsApiKey={apiKey} libraries={["places"]}>
+    <LoadScript googleMapsApiKey={apiKey} libraries={libraries}>
       <StandaloneSearchBox
         onLoad={(ref) => (searchBoxRef.current = ref)}
         onPlacesChanged={onPlacesChanged}

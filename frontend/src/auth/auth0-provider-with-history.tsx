@@ -16,7 +16,9 @@ const Auth0ProviderWithHistory: React.FC = ({ children }) => {
     <Auth0Provider
       domain={domain}
       clientId={clientId}
-      redirectUri="http://localhost:5173/home"
+      authorizationParams={{
+        redirect_uri: "http://localhost:5173/home",
+      }}
       onRedirectCallback={onRedirectCallback}
     >
       {children}

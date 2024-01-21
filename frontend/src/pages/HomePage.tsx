@@ -7,6 +7,7 @@ import Testimonial from "../components/Testimonial";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MapComponent from "../components/MapComponent";
+import axios from "axios";
 
 const categories = [
   { label: "Electrical" },

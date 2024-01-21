@@ -1,15 +1,19 @@
 import "dotenv/config";
 import express from "express";
 const cors = require("cors");
-import bodyParser from 'body-parser';
+import bodyParser from "body-parser";
 
 // import NoteModel from "./models/note";
 
 import WorkerModel from "./models/worker";
 
 import ReviewModel from "./models/review";
+import axios from "axios";
 
-import { getWorkerRecommendation, findRecommendations } from "./util/recommendations";
+import {
+  getWorkerRecommendation,
+  findRecommendations,
+} from "./util/recommendations";
 // import TradesPerson from "./models/tradespeople"; // Corrected import
 
 const app = express();
@@ -53,36 +57,58 @@ app.get("/service_workers", async (req, res) => {
 });
 
 // POST request for recommendation
-app.post('/recommend', async (req, res) => {
+app.post("/recommend", async (req, res) => {
   try {
     const workers = await WorkerModel.find().exec();
-    
+
     const { message } = req.body;
 
-    const gpt_prompt = "Request: " + message +
-    " Choose the top three workers from the list, returning only their worker_ids in the content of your message. " +
-    "Worker List: " + JSON.stringify(workers) + 
-    "You will give the result of my query in this exact format: " + 
-    "Result: {first_recommended_id: 1, second_recommended_id: 2, third_recommended_id: 3}";
+    const gpt_prompt =
+      "Request: " +
+      message +
+      " Choose the top three workers from the list, returning only their worker_ids in the content of your message. " +
+      "Worker List: " +
+      JSON.stringify(workers) +
+      "You will give the result of my query in this exact format: " +
+      "Result: {first_recommended_id: 1, second_recommended_id: 2, third_recommended_id: 3}";
 
     let workerRecommendation;
     let attempts = 0;
-    const maxAttempts = 3; 
+    const maxAttempts = 3;
     while (workerRecommendation == null && attempts < maxAttempts) {
       try {
         workerRecommendation = await getWorkerRecommendation(gpt_prompt);
       } catch {
         // pass
       }
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       attempts++;
     }
 
     console.log(workerRecommendation);
     res.json({ response: workerRecommendation });
   } catch (error: any) {
-    console.error('Error:', error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// POST route for Google Places search
+app.post("/google-places-search", async (req, res) => {
+  const { query, location } = req.body;
+  const apiKey = process.env.GOOGLE_PLACES_API_KEY; // Ensure you have this in your .env file
+  const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${
+    location.lat
+  },${location.lng}&radius=5000&keyword=${encodeURIComponent(
+    query
+  )}&key=${apiKey}`;
+
+  try {
+    const response = await axios.get(url);
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error in Google Places API Request:", error);
+    res.status(500).send("Error in fetching data from Google Places API");
   }
 });
 
@@ -106,7 +132,6 @@ app.post("/add_review", async (req, res) => {
     // // Save the review to MongoDB
     await newReview.save();
 
-
     res.status(201).json({ message: "Review added successfully" });
   } catch (error) {
     console.error(error);
@@ -120,7 +145,9 @@ app.get("/service_workers/:trade", async (req, res) => {
   try {
     const tradeSpecification = req.params.trade;
     console.log(tradeSpecification);
-    const workers = await WorkerModel.find({ trade: new RegExp(tradeSpecification, 'i') }).exec();
+    const workers = await WorkerModel.find({
+      trade: new RegExp(tradeSpecification, "i"),
+    }).exec();
 
     const reviews = await ReviewModel.find().exec();
 
@@ -144,6 +171,5 @@ app.get("/service_workers/:trade", async (req, res) => {
     res.status(500).json({ error: errorMessage });
   }
 });
-
 
 export default app;

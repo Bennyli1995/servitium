@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import SearchResultsPage from "./pages/SearchResultsPage";
 import ContactForm from "./components/ContactForm";
 import ProtectedRoute from "./pages/ProctedPage";
+import QueryResultsPage from "./pages/QueryResultsPage";
 
 const App: React.FC = () => {
   return (
@@ -48,6 +49,7 @@ const App: React.FC = () => {
               />
               <Route path="/worker/:workerId" element={<WorkerDetailsPage />} />
               <Route path="/contact" element={<ContactForm />} />
+              <Route path="/query-results" element={<QueryResultsPage />} />
             </Routes>
           </main>
           <Footer />
