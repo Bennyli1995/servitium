@@ -131,17 +131,25 @@ const WorkerDetails: React.FC = () => {
                 {worker.years_exp} years of experience
               </div>
               <div className="flex justify-center items-center mt-2">
-                <svg
-                  className="text-yellow-400 w-5 h-5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M9.049 2.927c-.28-.53-.761-.927-1.349-.927s-1.07.397-1.349.927L5 6.813l-5.051.73c-.588.085-1.049.51-1.2 1.092-.151.581.088 1.181.588 1.474l3.656 3.563-.863 5.037c-.098.57.151 1.139.588 1.474.438.336 1.004.397 1.479.163L10 17.25l4.53 2.381c.475.234 1.04.173 1.479-.163.438-.336.686-.905.588-1.474l-.863-5.037 3.656-3.563c.5-.293.74-.893.588-1.474-.151-.581-.612-1.007-1.2-1.092L15 6.813l-2.351-3.886z" />
-                </svg>
-                <span className="text-gray-600 font-bold ml-1">
-                  {averageRating} / 5
-                </span>
-                <span className="text-gray-600 ml-3">${worker.rate}/h</span>
+                {averageRating === "No reviews" ? (
+                  <span className="text-gray-600 font-bold ml-1">
+                    No reviews
+                  </span>
+                ) : (
+                  <>
+                    <svg
+                      className="text-yellow-400 w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.049 2.927c-.28-.53-.761-.927-1.349-.927s-1.07.397-1.349.927L5 6.813l-5.051.73c-.588.085-1.049.51-1.2 1.092-.151.581.088 1.181.588 1.474l3.656 3.563-.863 5.037c-.098.57.151 1.139.588 1.474.438.336 1.004.397 1.479.163L10 17.25l4.53 2.381c.475.234 1.04.173 1.479-.163.438-.336.686-.905.588-1.474l-.863-5.037 3.656-3.563c.5-.293.74-.893.588-1.474-.151-.581-.612-1.007-1.2-1.092L15 6.813l-2.351-3.886z" />
+                    </svg>
+                    <span className="text-gray-600 font-bold ml-1">
+                      {averageRating} / 5
+                    </span>
+                  </>
+                )}
+                <span className="text-gray-600 ml-4">${worker.rate}/h</span>
               </div>
             </div>
 
