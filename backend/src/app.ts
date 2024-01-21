@@ -16,9 +16,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use(bodyParser.json()); // Add this line to enable JSON body parsing
-app.use(bodyParser.urlencoded({ extended: true })); // Add this line to enable URL-encoded body parsing
-
+// app.use(bodyParser.json()); // Add this line to enable JSON body parsing
+// app.use(bodyParser.urlencoded({ extended: true })); // Add this line to enable URL-encoded body parsing
 
 app.get("/service_workers", async (req, res) => {
   try {
