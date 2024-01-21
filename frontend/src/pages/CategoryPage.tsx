@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import mockData from "../Fakers/fakeServiceWorkers";
+// import mockData from "../Fakers/fakeServiceWorkers";
 import profilePic from "../assets/User.jpeg";
 
 const CategoryPage: React.FC = () => {
@@ -13,19 +13,19 @@ const CategoryPage: React.FC = () => {
   useEffect(() => {
     const fetchWorkers = async () => {
       setIsLoading(true);
-
-      // Mock data simulating the response from your backend
-
-      // Simulate an async call with setTimeout
-      setTimeout(() => {
-        setWorkers(
-          mockData.filter(
-            (worker) =>
-              worker.trade.toLowerCase() === categoryLabel.toLowerCase()
-          )
+      try {
+        // Adjust the URL according to your server configuration
+        const response = await fetch(`http://localhost:5001/service_workers`);
+        const data = await response.json();
+        const filteredWorkers = data.filter(
+          (worker) => worker.trade.toLowerCase() === categoryLabel.toLowerCase()
         );
-        setIsLoading(false);
-      }, 1000); // Delay of 1 second to simulate a network request
+        setWorkers(filteredWorkers);
+      } catch (error) {
+        console.error("Failed to fetch workers:", error);
+        // Handle any errors here
+      }
+      setIsLoading(false);
     };
 
     fetchWorkers();
