@@ -4,6 +4,9 @@ import One from "../assets/One.png";
 import Two from "../assets/Two.png";
 import Three from "../assets/Three.png";
 import Testimonial from "../components/Testimonial";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import MapComponent from "../components/MapComponent";
 
 const categories = [
   { label: "Electrical" },
@@ -33,6 +36,37 @@ const testimonials = [
 ];
 
 const HomePage: React.FC = () => {
+  const [query, setQuery] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState({
+    lat: null,
+    lng: null,
+  });
+  const navigate = useNavigate();
+
+  const handleQuerySubmit = async (event) => {
+    event.preventDefault();
+    if (!selectedLocation.lat || !selectedLocation.lng) {
+      alert("Please select a location on the map.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5001/google-places-search",
+        {
+          query,
+          location: selectedLocation,
+        }
+      );
+      navigate("/query-results", { state: { results: response.data.results } });
+    } catch (error) {
+      console.error("Error in getting recommendations:", error);
+    }
+  };
+
+  const handleLocationSelect = (location) => {
+    setSelectedLocation(location);
+  };
   return (
     <div className="min-h-screen px-4 sm:px-6 lg:px-8">
       {/* Section for categories */}
@@ -100,6 +134,34 @@ const HomePage: React.FC = () => {
           ))}
         </div>
       </section>
+
+      <div className="additional-service-query bg-white shadow-lg rounded-lg p-6 mt-10 mx-auto max-w-2xl">
+        <form onSubmit={handleQuerySubmit} className="space-y-4">
+          <h2 className="text-2xl font-semibold text-center mb-4">
+            Looking for Something More?
+          </h2>
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="What service are you looking for?"
+            className="w-full p-3 border border-gray-300 rounded-lg"
+          />
+          <MapComponent onLocationSelect={handleLocationSelect} />
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white rounded p-2 mt-4"
+          >
+            Search
+          </button>
+        </form>
+        {selectedLocation.lat && (
+          <div className="text-center mt-4">
+            Selected Location: Latitude: {selectedLocation.lat}, Longitude:{" "}
+            {selectedLocation.lng}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
