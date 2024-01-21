@@ -8,6 +8,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MapComponent from "../components/MapComponent";
 import axios from "axios";
+import Testimonial1 from "../assets/Testimonial1.png";
+import Testimonial2 from "../assets/Testimonial2.png";
+import Testimonial3 from "../assets/Testimonial3.png";
 
 const categories = [
   { label: "Electrical" },
@@ -23,16 +26,19 @@ const testimonials = [
     quote:
       "Servitium made it easy for me to find someone to fix my porch. Highly recommend!",
     author: "Jane Doe",
+    photo: Testimonial1,
   },
   {
     quote:
       "Servitium is different in that you get instantaneous responses, nothing else like it!",
     author: "John Doe",
+    photo: Testimonial2,
   },
   {
     quote:
       "Servitium made it easy for me to find someone to fix my phone in under an hour. Best app ever!",
     author: "Josh Smith ",
+    photo: Testimonial3,
   },
 ];
 
@@ -124,12 +130,12 @@ const HomePage: React.FC = () => {
           What Our Users Say
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
+          {testimonials.map((testimonial, index, photo) => (
             <Testimonial
               key={index}
               quote={testimonial.quote}
               author={testimonial.author}
-              profilePic={testimonial.profilePic}
+              photo={testimonial.photo}
               companyLogo={testimonial.companyLogo}
             />
           ))}
