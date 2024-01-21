@@ -86,9 +86,9 @@ const HomePage: React.FC = () => {
           <h3 className="text-4xl font-bold mb-12 text-gray-800">
             How It Works
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 items-stretch">
+          <div className="grid grid-cols-1 sm:grid-cols-3 items-stretch">
             <div className="flex flex-col items-center text-center space-y-4">
-              <img src={One} alt="Step 1" className="mb-4 h-24 w-24" />
+              <img src={One} alt="Step 1" className="mb-4 h-36 w-36" />
               <h4 className="text-xl sm:text-2xl font-semibold">
                 Step 1: Choose a Service
               </h4>
@@ -97,7 +97,7 @@ const HomePage: React.FC = () => {
               </p>
             </div>
             <div className="flex flex-col items-center text-center space-y-4">
-              <img src={Two} alt="Step 2" className="mb-4 h-24 w-24" />
+              <img src={Two} alt="Step 2" className="mb-4 h-36 w-36" />
               <h4 className="text-xl sm:text-2xl font-semibold">
                 Step 2: Book Online
               </h4>
@@ -106,7 +106,7 @@ const HomePage: React.FC = () => {
               </p>
             </div>
             <div className="flex flex-col items-center text-center space-y-4">
-              <img src={Three} alt="Step 3" className="mb-4 h-24 w-24" />
+              <img src={Three} alt="Step 3" className="mb-4 h-36 w-36" />
               <h4 className="text-xl sm:text-2xl font-semibold">
                 Step 3: Get It Done
               </h4>

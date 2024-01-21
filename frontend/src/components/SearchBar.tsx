@@ -23,7 +23,7 @@ const SearchBar: React.FC = () => {
     <form onSubmit={handleSearch} className="flex-1 max-w-lg relative">
       <input
         type="search"
-        className="w-full rounded-full border border-neutral-300 pl-10 pr-4 py-3 text-neutral-700 focus:border-blue-500 focus:ring-0"
+        className="w-full rounded-full border border-neutral-300 pl-10 pr-4 py-3 text-neutral-700 focus:border-blue-500 focus:ring-0 bg:[#FBB35A]"
         placeholder="Describe your problem and we will do the rest!"
         aria-label="Search"
         value={query}
