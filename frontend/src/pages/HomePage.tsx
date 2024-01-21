@@ -136,7 +136,7 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      <div className="additional-service-query bg-white shadow-lg rounded-lg p-6 mt-10 mx-auto max-w-2xl">
+      <div className="additional-service-query bg-white shadow-lg rounded-lg p-6 mt-10 mx-auto max-w-2xl mb-10">
         <form onSubmit={handleQuerySubmit} className="space-y-4">
           <h2 className="text-2xl font-semibold text-center mb-4">
             Looking for Something More?
@@ -151,7 +151,7 @@ const HomePage: React.FC = () => {
           <MapComponent onLocationSelect={handleLocationSelect} />
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white rounded p-2 mt-4"
+            className="w-full bg-blue-500 text-white rounded p-2 mt-4 hover:bg-blue-600"
           >
             Search
           </button>
