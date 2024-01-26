@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import profilePic from "../assets/User.jpeg"; // Update the import path as necessary
+import { useNavigate, useLocation } from "react-router-dom";
+import profilePic from "../assets/User.jpeg";
+import { Worker } from "../types/Worker";
 
 const SearchResultsPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const prompt = useParams();
   const query = new URLSearchParams(location.search).get("query");
   const [recommendedWorkers, setRecommendedWorkers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -14,23 +14,20 @@ const SearchResultsPage: React.FC = () => {
     const fetchRecommendations = async () => {
       setIsLoading(true);
       try {
-        const recResponse: any = await fetch(
-          "http://localhost:5001/recommend",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: query }),
-          }
-        );
+        const recResponse = await fetch("http://localhost:5001/recommend", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: query }),
+        });
 
-        let recData: any = await recResponse.json();
+        let recData = await recResponse.json();
 
         const recDataResponse = recData.response;
         const workersResponse = await fetch(
           "http://localhost:5001/service_workers"
         );
         const workersData = await workersResponse.json();
-        const filteredWorkers = workersData.filter((worker) =>
+        const filteredWorkers = workersData.filter((worker: Worker) =>
           recDataResponse.includes(worker.worker_id)
         );
         setRecommendedWorkers(filteredWorkers);
@@ -56,7 +53,7 @@ const SearchResultsPage: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {recommendedWorkers.map((worker) => (
+      {recommendedWorkers.map((worker: Worker) => (
         <div
           key={worker.worker_id}
           className="p-4 mb-4 border rounded-lg shadow-md bg-white cursor-pointer hover:shadow-lg"

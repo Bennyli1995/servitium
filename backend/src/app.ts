@@ -3,7 +3,6 @@ import express from "express";
 const cors = require("cors");
 const nodemailer = require("nodemailer");
 const twilio = require("twilio");
-import bodyParser from "body-parser";
 
 // import NoteModel from "./models/note";
 
@@ -21,10 +20,7 @@ import {
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
-// app.use(bodyParser.json()); // Add this line to enable JSON body parsing
-// app.use(bodyParser.urlencoded({ extended: true })); // Add this line to enable URL-encoded body parsing
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.send("Working");

@@ -2,7 +2,6 @@ import { InferSchemaType, model, Schema } from "mongoose";
 
 const reviewSchema = new Schema(
   {
-    // _id: { type: String, required: true },
     review_id: { type: Number, required: true },
     userID: { type: String, required: true },
     tradespersonID: { type: Number, required: true },
