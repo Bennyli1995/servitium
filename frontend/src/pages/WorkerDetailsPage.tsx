@@ -128,7 +128,8 @@ const WorkerDetails: React.FC = () => {
                 {worker.first_name} {worker.last_name}
               </h1>
               <div className="text-gray-500">
-                {worker.trade == "Electrical" ? (<span>Electrician</span>
+                {worker.trade == "Electrical" ? (
+                  <span>Electrician</span>
                 ) : (
                   <span>Plumber</span>
                 )}
